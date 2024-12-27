@@ -96,6 +96,21 @@ void update(void) {
 
 }
 
+
+void draw_grid(void) {
+	// Draw a background grid that files the entire window.
+	// Lines should be rendered at every row/col multiple of 10.
+
+	for (int y = 0; y < window_height; y++) {
+		bool isYMultipleOfTen = y % 10 == 0;
+		for (int x = 0; x < window_width; x++) {
+			bool isXMultipleOfTen = x % 10 == 0;
+			if (isYMultipleOfTen || isXMultipleOfTen)
+				color_buffer[(window_width * y) + x] = 0xFFFFFFFF;
+		}
+	}
+}
+
 void render_color_buffer(void) {
 	SDL_UpdateTexture(
 		color_buffer_texture,
@@ -123,9 +138,10 @@ void render(void) {
 	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 	SDL_RenderClear(renderer);
 
-	render_color_buffer();
+	draw_grid();
 
-	clear_color_buffer(0xFFFFFF00);
+	render_color_buffer();
+	clear_color_buffer(0xFF000000);
 
 	SDL_RenderPresent(renderer);
 }
