@@ -63,13 +63,6 @@ void render(void) {
 	SDL_RenderPresent(renderer);
 }
 
-void destroy_window(void) {
-	free(color_buffer);
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
-	SDL_Quit();
-}
-
 int main(void) {
    is_running = initialize_window();
 
