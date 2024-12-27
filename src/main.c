@@ -108,14 +108,13 @@ void draw_grid(void) {
 	}
 }
 
-void draw_rectangle(int left, int top, int width, int height, uint32_t color) {
-	for (int y = 0; y < window_height; y++) {
-		if (y > top && y < top + height) {
-			for (int x = 0; x < window_width; x++) {
-				if (x > left && x < left + width) {
-					color_buffer[(window_width * y) + x] = 0xFFFF00FF;
-				}
-			}
+void draw_rectangle(int x, int y, int width, int height, uint32_t color) {
+	for (int j = 0; j < width; j++) {
+		for (int i = 0; i < height; i++) {
+			int current_x = j + x;
+			int current_y = i + y;
+
+			color_buffer[(window_width * current_y) + current_x] = color;
 		}
 	}
 }
