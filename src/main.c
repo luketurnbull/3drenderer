@@ -108,16 +108,11 @@ void draw_grid(void) {
 	}
 }
 
-void draw_rectangle(void) {
-	int rectangle_width = 500;
-	int rectangle_height = 200;
-	int left = 20;
-	int top = 20;
-
+void draw_rectangle(int left, int top, int width, int height, uint32_t color) {
 	for (int y = 0; y < window_height; y++) {
-		if (y > top && y < top + rectangle_height) {
+		if (y > top && y < top + height) {
 			for (int x = 0; x < window_width; x++) {
-				if (x > left && x < left + rectangle_width) {
+				if (x > left && x < left + width) {
 					color_buffer[(window_width * y) + x] = 0xFFFF00FF;
 				}
 			}
@@ -153,7 +148,13 @@ void render(void) {
 	SDL_RenderClear(renderer);
 
 	draw_grid();
-	draw_rectangle();
+	draw_rectangle(
+		20,
+		50,
+		500,
+		300,
+		0xFFFF00FF
+	);
 
 	render_color_buffer();
 	clear_color_buffer(0xFF000000);
