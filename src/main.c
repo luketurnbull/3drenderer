@@ -108,6 +108,23 @@ void draw_grid(void) {
 	}
 }
 
+void draw_rectangle(void) {
+	int rectangle_width = 500;
+	int rectangle_height = 200;
+	int left = 20;
+	int top = 20;
+
+	for (int y = 0; y < window_height; y++) {
+		if (y > top && y < top + rectangle_height) {
+			for (int x = 0; x < window_width; x++) {
+				if (x > left && x < left + rectangle_width) {
+					color_buffer[(window_width * y) + x] = 0xFFFF00FF;
+				}
+			}
+		}
+	}
+}
+
 void render_color_buffer(void) {
 	SDL_UpdateTexture(
 		color_buffer_texture,
@@ -136,6 +153,7 @@ void render(void) {
 	SDL_RenderClear(renderer);
 
 	draw_grid();
+	draw_rectangle();
 
 	render_color_buffer();
 	clear_color_buffer(0xFF000000);
