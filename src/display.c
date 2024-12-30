@@ -77,7 +77,11 @@ void draw_rectangle(int x, int y, int width, int height, uint32_t color) {
 
 	for (int current_x = start_x; current_x < end_x; current_x++) {
 		for (int current_y = start_y; current_y < end_y; current_y++) {
-			color_buffer[(window_width * current_y) + current_x] = color;
+			draw_pixel(
+				current_x,
+				current_y,
+				color
+			);
 		}
 	}
 }
