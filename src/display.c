@@ -86,6 +86,25 @@ void draw_rectangle(int x, int y, int width, int height, uint32_t color) {
 	}
 }
 
+void draw_line(int x0, int y0, int x1, int y1, uint32_t color) {
+	int delta_x = (x1 - x0);
+	int delta_y = (y1 - y0);
+
+	int longest_side_length = abs(delta_x) > abs(delta_y) ? abs(delta_x) : abs(delta_y);
+
+	float x_increment = delta_x / (float)longest_side_length;
+	float y_increment = delta_y / (float)longest_side_length;
+
+	float current_x = x0;
+	float current_y = y0;
+
+	for (int i = 0; i < longest_side_length; i++) {
+		draw_pixel(round(current_x), round(current_y), color);
+		current_x += x_increment;
+		current_y += y_increment;
+	}
+}
+
 void render_color_buffer(void) {
 	SDL_UpdateTexture(
 		color_buffer_texture,
