@@ -35,8 +35,13 @@ void setup(void) {
 		window_height
 	);
 
-	// load_cube_mesh_data();
-	load_obj_file_data("/assets/cube.obj");
+
+    // load_cube_mesh_data();
+    printf("About to load OBJ file...\n");
+    fflush(stdout);
+    
+    // Try with relative path instead
+    load_obj_file_data("assets/f22.obj");
 }
 
 void process_input(void) {

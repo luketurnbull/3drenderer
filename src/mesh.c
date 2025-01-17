@@ -2,7 +2,9 @@
 #define MESH_C
 
 #include "mesh.h"
+#include <_stdio.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "array.h"
 #include "vector.h"
 
@@ -61,23 +63,47 @@ void load_cube_mesh_data(void) {
 }
 
 void load_obj_file_data(char* filename) {
-   // TODO: Read the contents of the .obj filename
-   // and load the vertices and faces in 
-   // our mesh.vertices and mesh.faces
+    FILE *meshFile = fopen(filename, "r");
+    if (meshFile == NULL) {
+        printf("❌ Error opening file: %s\n", filename);
+        return;
+    }
 
+    char *line = NULL;
+    size_t len = 0;
+    ssize_t read;
 
-   // Read file data
+    while ((read = getline(&line, &len, meshFile)) != -1) {
+        if (line[0] == 'v' && line[1] == ' ') {
+            // Parse vertex (v x y z)
+            float x, y, z;
+            if (sscanf(line, "v %f %f %f", &x, &y, &z) == 3) {
+                vec3_t vertex = {x, y, z};
+                array_push(mesh.vertices, vertex);
+            }
+        }
+        else if (line[0] == 'f' && line[1] == ' ') {
+            // Parse face (f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3)
+            int vertex_indices[3];
+            int matches = sscanf(line, "f %d/%*d/%*d %d/%*d/%*d %d/%*d/%*d", 
+                               &vertex_indices[0], 
+                               &vertex_indices[1], 
+                               &vertex_indices[2]);
+            
+            if (matches == 3) {
+                // OBJ files use 1-based indexing, convert to 0-based
+                face_t face = {
+                    .a = vertex_indices[0],
+                    .b = vertex_indices[1],
+                    .c = vertex_indices[2]
+                };
+                array_push(mesh.faces, face);
+            }
+        }
+    }
 
-   // Parse OBJ, and loop through all lines
-
-   // Find vertices and add them to mesh.vertices
-   // Does it start with "v"?
-
-
-   // Find faces and add them to mesh.faces
-   // Does is start with "f"?
-   // "f 1/1/1 2/2/2 3/3/1"
-   // This face indexes will be 1, 2 and 3
+    free(line);
+    fclose(meshFile);
 }
 
 #endif
