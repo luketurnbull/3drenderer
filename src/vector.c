@@ -1,6 +1,55 @@
 #include "vector.h"
 #include <math.h>
 
+
+// Implementations of Vector 2D functions
+float vec2_length(vec2_t v) {
+   return sqrt(v.x * v.x + v.y * v.y);
+}
+
+vec2_t vec2_add(vec2_t a, vec2_t b) {
+   vec2_t v = {
+      .x = a.x + b.x,
+      .y = a.y + b.y
+   };
+
+   return v;
+}
+
+vec2_t vec2_subtract(vec2_t a, vec2_t b) {
+   vec2_t v = {
+      .x = a.x - b.y,
+      .y = b.x - b.y
+   };
+
+   return v;
+}
+
+// Implementations of Vectors 3D functions
+float vec3_length(vec3_t v) {
+   return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+}
+
+vec3_t vec3_add(vec3_t a, vec3_t b) {
+   vec3_t v = {
+      .x = a.x + b.x,
+      .y = a.y + b.y,
+      .z = a.z + b.z
+   };
+
+   return v;
+}
+
+vec3_t vec3_subtract(vec3_t a, vec3_t b) {
+   vec3_t v = {
+      .x = a.x - b.x,
+      .y = a.y - b.y,
+      .z = a.z - b.z
+   };
+
+   return v;
+}
+
 vec3_t vec3_rotate_x(vec3_t v, float angle) {
    vec3_t rotated_vector = {
       .x = v.x,

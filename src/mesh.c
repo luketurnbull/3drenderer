@@ -5,6 +5,7 @@
 #include <_stdio.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "array.h"
 #include "vector.h"
 
@@ -69,12 +70,12 @@ void load_obj_file_data(char* filename) {
         return;
     }
 
-    char *line = NULL;
+    char *line = NULL; 
     size_t len = 0;
     ssize_t read;
 
     while ((read = getline(&line, &len, meshFile)) != -1) {
-        if (line[0] == 'v' && line[1] == ' ') {
+        if (strncmp(line, "v ", 2) == 0) {
             // Parse vertex (v x y z)
             float x, y, z;
             if (sscanf(line, "v %f %f %f", &x, &y, &z) == 3) {
@@ -82,7 +83,7 @@ void load_obj_file_data(char* filename) {
                 array_push(mesh.vertices, vertex);
             }
         }
-        else if (line[0] == 'f' && line[1] == ' ') {
+        else if (strncmp(line, "f ", 2) == 0) {
             // Parse face (f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3)
             int vertex_indices[3];
             int matches = sscanf(line, "f %d/%*d/%*d %d/%*d/%*d %d/%*d/%*d", 
@@ -91,7 +92,7 @@ void load_obj_file_data(char* filename) {
                                &vertex_indices[2]);
             
             if (matches == 3) {
-                // OBJ files use 1-based indexing, convert to 0-based
+                // OBJ files use 1-based indexing, convert to 0-based;;;
                 face_t face = {
                     .a = vertex_indices[0],
                     .b = vertex_indices[1],
