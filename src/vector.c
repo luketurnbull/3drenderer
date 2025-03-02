@@ -25,6 +25,30 @@ vec2_t vec2_subtract(vec2_t a, vec2_t b) {
    return v;
 }
 
+vec2_t vec2_multiply(vec2_t v, float factor) {
+   vec2_t result = {
+      .x = v.x * factor,
+      .y = v.y * factor
+   };
+
+   return result;
+}
+
+vec2_t vec2_divide(vec2_t v, float factor) {
+   vec2_t result = {
+      .x = v.x / factor,
+      .y = v.y / factor
+   };
+
+   return result;
+}
+
+float vec2_dot(vec2_t a, vec2_t b) {
+   return (a.x * b.x) + (a.y * b.y);
+}
+
+
+
 // Implementations of Vectors 3D functions
 float vec3_length(vec3_t v) {
    return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
@@ -36,7 +60,7 @@ vec3_t vec3_add(vec3_t a, vec3_t b) {
       .y = a.y + b.y,
       .z = a.z + b.z
    };
-
+   
    return v;
 }
 
@@ -46,8 +70,42 @@ vec3_t vec3_subtract(vec3_t a, vec3_t b) {
       .y = a.y - b.y,
       .z = a.z - b.z
    };
-
+   
    return v;
+}
+
+vec3_t vec3_multiply(vec3_t v, float factor) {
+   vec3_t result = {
+      .x = v.x * factor,
+      .y = v.y * factor,
+      .z = v.z * factor
+   };
+
+   return result;
+}
+
+vec3_t vec3_divide(vec3_t v, float factor) {
+   vec3_t result = {
+      .x = v.x / factor,
+      .y = v.y / factor,
+      .z = v.z / factor
+   };
+
+   return result;
+}
+
+vec3_t vec_cross(vec3_t a, vec3_t b){
+   vec3_t result = {
+      .x = a.y * b.z - a.z * b.y,
+      .y = a.z * b.x - a.x * b.z,
+      .z = a.x * b.y - a.y * b.x
+   };
+
+   return result;
+}
+
+float vec3_dot(vec3_t a, vec3_t b) {
+   return (a.x * b.x) + (a.y * b.y) + (a.z * b.z);
 }
 
 vec3_t vec3_rotate_x(vec3_t v, float angle) {
