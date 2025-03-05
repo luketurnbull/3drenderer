@@ -28,7 +28,7 @@ vec3_t vec3_subtract(vec3_t a, vec3_t b);
 vec3_t vec3_multiply(vec3_t v, float factor);
 vec3_t vec3_divide(vec3_t v, float factor);
 vec3_t vec3_cross(vec3_t a, vec3_t b);
-float dot(vec3_t a, vec3_t b);
+float vec3_dot(vec3_t a, vec3_t b);
 
 
 vec3_t vec3_rotate_x(vec3_t v, float angle);
