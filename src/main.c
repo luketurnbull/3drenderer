@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include "array.h"
 #include "display.h"
+#include "matrix.h"
 #include "vector.h"
 #include "mesh.h"
 
@@ -42,8 +43,8 @@ void setup(void) {
     );
 
     // Loads the vertex and face values for the mesh data structure
-    // load_cube_mesh_data();
-    load_obj_file_data("./assets/f22.obj");
+    load_cube_mesh_data();
+    // load_obj_file_data("./assets/f22.obj");
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -107,6 +108,11 @@ void update(void) {
     mesh.rotation.y += 0.01;
     mesh.rotation.z += 0.01;
 
+    mesh.scale.x += 0.002;
+
+    // Create a scale matrix that will be used to multiply the mesh vertices
+    mat4_t scale_matrix = mat4_make_scale(mesh.scale.x, mesh.scale.y, mesh.scale.z);
+
     // Loop all triangle faces of our mesh
     int num_faces = array_length(mesh.faces);
     for (int i = 0; i < num_faces; i++) {
@@ -117,18 +123,15 @@ void update(void) {
         face_vertices[1] = mesh.vertices[mesh_face.b - 1];
         face_vertices[2] = mesh.vertices[mesh_face.c - 1];
 
-        vec3_t transformed_vertices[3];
+        vec4_t transformed_vertices[3];
 
         // Loop all three vertices of this current face and apply transformations
         for (int j = 0; j < 3; j++) {
-            vec3_t transformed_vertex = face_vertices[j];
+            vec4_t transformed_vertex = vec4_from_vec3(face_vertices[j]);
 
-            // T
-
-            transformed_vertex = vec3_rotate_x(transformed_vertex, mesh.rotation.x);
-            transformed_vertex = vec3_rotate_y(transformed_vertex, mesh.rotation.y);
-            transformed_vertex = vec3_rotate_z(transformed_vertex, mesh.rotation.z);
-
+            // Use a matrix to scale our original vertex
+            transformed_vertex = mat4_mul_vec4(scale_matrix, transformed_vertex);
+            
             // Translate the vertex away from the camera
             transformed_vertex.z += 5;
 
@@ -138,9 +141,9 @@ void update(void) {
 
         // Backface culling test to see if the current face should be projected
         if (cull_method == CULL_BACKFACE) {
-            vec3_t vector_a = transformed_vertices[0]; /*   A   */
-            vec3_t vector_b = transformed_vertices[1]; /*  / \  */
-            vec3_t vector_c = transformed_vertices[2]; /* C---B */
+            vec3_t vector_a = vec3_from_vec4(transformed_vertices[0]); /*   A   */
+            vec3_t vector_b = vec3_from_vec4(transformed_vertices[1]); /*  / \  */
+            vec3_t vector_c = vec3_from_vec4(transformed_vertices[2]); /* C---B */
 
             // Get the vector subtraction of B-A and C-A
             vec3_t vector_ab = vec3_sub(vector_b, vector_a);
@@ -169,7 +172,7 @@ void update(void) {
         // Loop all three vertices to perform projection
         for (int j = 0; j < 3; j++) {
             // Project the current vertex
-            projected_points[j] = project(transformed_vertices[j]);
+            projected_points[j] = project(vec3_from_vec4(transformed_vertices[j]));
 
             // Scale and translate the projected points to the middle of the screen
             projected_points[j].x += (window_width / 2);
